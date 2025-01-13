@@ -97,8 +97,15 @@ function canQueenCaptureKing(queen, king) {
  *  2, 2, 5   => false
  *  3, 0, 3   => false
  */
-function isIsoscelesTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isIsoscelesTriangle(a, b, c) {
+  if (a + b <= c || b + c <= a || c + a <= b) {
+    return false;
+  }
+  if (a === b || b === c || c === a) {
+    return true;
+  }
+
+  return false;
 }
 
 /**
@@ -115,8 +122,45 @@ function isIsoscelesTriangle(/* a, b, c */) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  const romNum = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
+  const romNumTens = ['X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC'];
+  const romNumHundreds = [
+    'C',
+    'CC',
+    'CCC',
+    'CD',
+    'D',
+    'DC',
+    'DCC',
+    'DCCC',
+    'CM',
+  ];
+  const romNumThousands = ['M', 'MM', 'MMM'];
+
+  let result = '';
+  let tempNum = num;
+
+  if (tempNum >= 1000) {
+    const thousands = Math.floor(tempNum / 1000);
+    result += romNumThousands[thousands - 1];
+    tempNum %= 1000;
+  }
+  if (tempNum >= 100) {
+    const hundreds = Math.floor(tempNum / 100);
+    result += romNumHundreds[hundreds - 1];
+    tempNum %= 100;
+  }
+  if (tempNum >= 10) {
+    const tens = Math.floor(tempNum / 10);
+    result += romNumTens[tens - 1];
+    tempNum %= 10;
+  }
+  if (tempNum > 0) {
+    result += romNum[tempNum - 1];
+  }
+
+  return result;
 }
 
 /**
@@ -134,8 +178,37 @@ function convertToRomanNumerals(/* num */) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+function convertNumberToString(numberStr) {
+  let result = '';
+  const dictionary = {
+    0: 'zero',
+    1: 'one',
+    2: 'two',
+    3: 'three',
+    4: 'four',
+    5: 'five',
+    6: 'six',
+    7: 'seven',
+    8: 'eight',
+    9: 'nine',
+    '-': 'minus',
+    '.': 'point',
+  };
+
+  let decimalPointEncountered = false;
+
+  for (let i = 0; i < numberStr.length; i += 1) {
+    const char = numberStr[i];
+
+    if (char === '.') {
+      result += 'point ';
+      decimalPointEncountered = true;
+    } else if (char in dictionary) {
+      result += `${dictionary[char]} `;
+    }
+  }
+
+  return result.trim();
 }
 
 /**
@@ -150,8 +223,16 @@ function convertNumberToString(/* numberStr */) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  for (let i = 0; i < str.length / 2; i += 1) {
+    const char = str[i];
+    const j = str.length - 1 - i;
+
+    if (char !== str[j]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -168,8 +249,14 @@ function isPalindrome(/* str */) {
  *  'qwerty', 'Q'     => -1
  *  'qwerty', 'p'     => -1
  */
-function getIndexOf(/* str, letter */) {
-  throw new Error('Not implemented');
+function getIndexOf(str, letter) {
+  for (let i = 0; i < str.length; i += 1) {
+    const char = str[i];
+    if (char === letter) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 /**
@@ -187,8 +274,16 @@ function getIndexOf(/* str, letter */) {
  *  12345, 0    => false
  *  12345, 6    => false
  */
-function isContainNumber(/* num, digit */) {
-  throw new Error('Not implemented');
+function isContainNumber(num, digit) {
+  let remainingNumber = Math.abs(num);
+  while (remainingNumber > 0) {
+    const currentDigit = remainingNumber % 10;
+    remainingNumber = Math.floor(remainingNumber / 10);
+    if (currentDigit === digit) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -204,8 +299,20 @@ function isContainNumber(/* num, digit */) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  let totalSum = 0;
+  for (let i = 0; i < arr.length; i += 1) {
+    totalSum += arr[i];
+  }
+  let leftSum = 0;
+  for (let i = 0; i < arr.length; i += 1) {
+    const rightSum = totalSum - arr[i] - leftSum;
+    if (leftSum === rightSum) {
+      return i;
+    }
+    leftSum += arr[i];
+  }
+  return -1;
 }
 
 /**
@@ -229,8 +336,61 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const matrix = [];
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = [];
+  }
+
+  let num = 1;
+  let row = 0;
+  let col = 0;
+  let direction = 0;
+  const steps = size;
+
+  while (num <= size * size) {
+    matrix[row][col] = num;
+    num += 1;
+
+    switch (direction) {
+      case 0:
+        if (col + 1 < steps && !matrix[row][col + 1]) {
+          col += 1;
+        } else {
+          direction = 1;
+          row += 1;
+        }
+        break;
+      case 1:
+        if (row + 1 < steps && !matrix[row + 1][col]) {
+          row += 1;
+        } else {
+          direction = 2;
+          col -= 1;
+        }
+        break;
+      case 2:
+        if (col - 1 >= 0 && !matrix[row][col - 1]) {
+          col -= 1;
+        } else {
+          direction = 3;
+          row -= 1;
+        }
+        break;
+      case 3:
+        if (row - 1 >= 0 && !matrix[row - 1][col]) {
+          row -= 1;
+        } else {
+          direction = 0;
+          col += 1;
+        }
+        break;
+      default:
+        throw new Error('Invalid direction');
+    }
+  }
+
+  return matrix;
 }
 
 /**
@@ -248,8 +408,19 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const n = matrix.length;
+  const newMatrix = matrix.map((row) => [...row]);
+  for (let i = 0; i < n / 2; i += 1) {
+    for (let j = i; j < n - i - 1; j += 1) {
+      const temp = newMatrix[i][j];
+      newMatrix[i][j] = newMatrix[n - 1 - j][i];
+      newMatrix[n - 1 - j][i] = newMatrix[n - 1 - i][n - 1 - j];
+      newMatrix[n - 1 - i][n - 1 - j] = newMatrix[j][n - 1 - i];
+      newMatrix[j][n - 1 - i] = temp;
+    }
+  }
+  return newMatrix;
 }
 
 /**
