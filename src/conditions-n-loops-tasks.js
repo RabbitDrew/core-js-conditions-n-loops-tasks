@@ -178,37 +178,8 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(numberStr) {
-  let result = '';
-  const dictionary = {
-    0: 'zero',
-    1: 'one',
-    2: 'two',
-    3: 'three',
-    4: 'four',
-    5: 'five',
-    6: 'six',
-    7: 'seven',
-    8: 'eight',
-    9: 'nine',
-    '-': 'minus',
-    '.': 'point',
-  };
-
-  let decimalPointEncountered = false;
-
-  for (let i = 0; i < numberStr.length; i += 1) {
-    const char = numberStr[i];
-
-    if (char === '.') {
-      result += 'point ';
-      decimalPointEncountered = true;
-    } else if (char in dictionary) {
-      result += `${dictionary[char]} `;
-    }
-  }
-
-  return result.trim();
+function convertNumberToString(/* numberStr */) {
+  throw new Error('Not implemented');
 }
 
 /**
@@ -408,19 +379,8 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(matrix) {
-  const n = matrix.length;
-  const newMatrix = matrix.map((row) => [...row]);
-  for (let i = 0; i < n / 2; i += 1) {
-    for (let j = i; j < n - i - 1; j += 1) {
-      const temp = newMatrix[i][j];
-      newMatrix[i][j] = newMatrix[n - 1 - j][i];
-      newMatrix[n - 1 - j][i] = newMatrix[n - 1 - i][n - 1 - j];
-      newMatrix[n - 1 - i][n - 1 - j] = newMatrix[j][n - 1 - i];
-      newMatrix[j][n - 1 - i] = temp;
-    }
-  }
-  return newMatrix;
+function rotateMatrix(/* matrix */) {
+  throw new Error('Not implemented');
 }
 
 /**
