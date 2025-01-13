@@ -178,8 +178,63 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+function convertNumberToString(numberStr) {
+  let result = '';
+  for (let i = 0; i < numberStr.length; i += 1) {
+    const char = numberStr[i];
+    let word = '';
+
+    switch (char) {
+      case '0':
+        word = 'zero';
+        break;
+      case '1':
+        word = 'one';
+        break;
+      case '2':
+        word = 'two';
+        break;
+      case '3':
+        word = 'three';
+        break;
+      case '4':
+        word = 'four';
+        break;
+      case '5':
+        word = 'five';
+        break;
+      case '6':
+        word = 'six';
+        break;
+      case '7':
+        word = 'seven';
+        break;
+      case '8':
+        word = 'eight';
+        break;
+      case '9':
+        word = 'nine';
+        break;
+      case '.':
+        word = 'point';
+        break;
+      case ',':
+        word = 'point';
+        break;
+      case '-':
+        word = 'minus';
+        break;
+      default:
+        throw new Error('Invalid character in number string');
+    }
+
+    result += word;
+    if (i < numberStr.length - 1) {
+      result += ' ';
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -275,14 +330,16 @@ function getBalanceIndex(arr) {
   for (let i = 0; i < arr.length; i += 1) {
     totalSum += arr[i];
   }
+
   let leftSum = 0;
   for (let i = 0; i < arr.length; i += 1) {
-    const rightSum = totalSum - arr[i] - leftSum;
+    const rightSum = totalSum - leftSum - arr[i];
     if (leftSum === rightSum) {
       return i;
     }
     leftSum += arr[i];
   }
+
   return -1;
 }
 
@@ -379,8 +436,27 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const n = matrix.length;
+
+  for (let layer = 0; layer < Math.floor(n / 2); layer += 1) {
+    const first = layer;
+    const last = n - 1 - layer;
+    for (let i = first; i < last; i += 1) {
+      const offset = i - first;
+      const top = matrix[first][i];
+      const temp1 = matrix[first];
+      temp1[i] = matrix[last - offset][first];
+      const temp2 = matrix[last - offset];
+      temp2[first] = matrix[last][last - offset];
+      const temp3 = matrix[last];
+      temp3[last - offset] = matrix[i][last];
+      const temp4 = matrix[i];
+      temp4[last] = top;
+    }
+  }
+
+  return matrix;
 }
 
 /**
@@ -439,8 +515,70 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const digits = [];
+  let temp = number;
+
+  while (temp > 0) {
+    digits[digits.length] = temp % 10;
+    temp = Math.floor(temp / 10);
+  }
+
+  const len = digits.length;
+  for (let i = 0; i < Math.floor(len / 2); i += 1) {
+    const tempDigit = digits[i];
+    digits[i] = digits[len - 1 - i];
+    digits[len - 1 - i] = tempDigit;
+  }
+
+  let i = len - 2;
+  while (i >= 0 && digits[i] >= digits[i + 1]) {
+    i -= 1;
+  }
+
+  if (i < 0) {
+    return number;
+  }
+
+  let j = len - 1;
+  while (digits[j] <= digits[i]) {
+    j -= 1;
+  }
+
+  const tempDigit = digits[i];
+  digits[i] = digits[j];
+  digits[j] = tempDigit;
+
+  const leftPart = [];
+  for (let k = 0; k <= i; k += 1) {
+    leftPart[leftPart.length] = digits[k];
+  }
+
+  const rightPart = [];
+  for (let k = i + 1; k < len; k += 1) {
+    rightPart[rightPart.length] = digits[k];
+  }
+
+  for (let k = 0; k < Math.floor(rightPart.length / 2); k += 1) {
+    const tempRightDigit = rightPart[k];
+    rightPart[k] = rightPart[rightPart.length - 1 - k];
+    rightPart[rightPart.length - 1 - k] = tempRightDigit;
+  }
+
+  const merged = [];
+  for (let k = 0; k < leftPart.length; k += 1) {
+    merged[merged.length] = leftPart[k];
+  }
+  for (let k = 0; k < rightPart.length; k += 1) {
+    merged[merged.length] = rightPart[k];
+  }
+
+  let result = 0;
+  for (let k = 0; k < merged.length; k += 1) {
+    result = result * 10 + merged[k];
+  }
+
+  return result;
 }
 
 module.exports = {
